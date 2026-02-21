@@ -79,8 +79,8 @@ export default function HeroSection() {
               </span>
             </h1>
             
-            <p className="text-gray-400 text-xs md:text-sm max-w-sm leading-relaxed mt-4 md:mt-6">
-              {heroData.description || "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s."}
+            <p className="text-gray-400 text-xs md:text-sm max-w-sm leading-relaxed mt-4 md:mt-6 line-clamp-3">
+                {heroData.description || "Lorem Ipsum is simply dummy text..."}
             </p>
 
             {/* Social Media Buttons */}
