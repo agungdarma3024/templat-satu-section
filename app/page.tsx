@@ -121,7 +121,7 @@ export default function HeroSection() {
 
       {/* --- Footer Cards --- */}
       <div className="absolute bottom-0 left-0 w-full grid grid-cols-2 md:grid-cols-4 gap-1 px-8 md:px-12 pb-6 md:pb-8">
-        {(featuresList.length > 0 ? featuresList : [1,2,3,4]).map((item, index) => (
+        {(featuresList.length > 0 ? featuresList.slice(0, 4) : [1,2,3,4]).map((item, index) => (
           <div 
             key={index}
             className={`p-4 md:p-6 h-28 md:h-32 flex flex-col justify-end transition-transform duration-300 hover:-translate-y-1 ${
