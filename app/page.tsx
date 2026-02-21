@@ -1,14 +1,61 @@
 "use client";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { Instagram, Twitter, Youtube } from "lucide-react";
 
+// Tambahkan interface untuk tipe data
+interface HeroData {
+  title?: string;
+  subtitle?: string;
+  description?: string;
+  hero_image?: string;
+}
+
+interface FeatureItem {
+  title?: string;
+  description?: string;
+}
+
+interface ContentData {
+  hero: HeroData;
+  features: {
+    features?: FeatureItem[];
+  };
+}
+
 export default function HeroSection() {
+  const [content, setContent] = useState<ContentData | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    // Ambil data dari CMS
+    fetch('/api/content')
+      .then(res => res.json())
+      .then((data: ContentData) => {
+        setContent(data);
+        setLoading(false);
+      })
+      .catch(err => {
+        console.error('Error loading content:', err);
+        setLoading(false);
+      });
+  }, []);
+
   const socialLinks = [
     { icon: <Instagram size={18} />, href: "#" },
     { icon: <Twitter size={18} />, href: "#" },
     { icon: <Youtube size={18} />, href: "#" },
   ];
+
+  // Tampilkan loading atau konten default sementara
+  if (loading) {
+    return <div className="min-h-screen bg-[#0f0f0f] flex items-center justify-center text-white">Loading...</div>;
+  }
+
+  // Gunakan data dari CMS, atau fallback ke default kalau belum ada
+  const heroData = content?.hero || {};
+  const featuresData = content?.features || {};
+  const featuresList = featuresData?.features || [];
 
   return (
     <div className="relative min-h-screen bg-[#0f0f0f] text-white flex flex-col justify-center overflow-hidden font-sans">
@@ -26,15 +73,14 @@ export default function HeroSection() {
             transition={{ duration: 0.8 }}
           >
             <h1 className="text-5xl md:text-6xl font-black leading-none mb-4 uppercase tracking-tighter">
-              HEADPHONE <br /> 
+              {heroData.title || "HEADPHONE"} <br /> 
               <span className="text-white/90 border-y border-white/30 py-1 md:py-2 mt-2 block w-fit">
-                ACSESSORIS
+                {heroData.subtitle || "ACCESSORIS"}
               </span>
             </h1>
             
             <p className="text-gray-400 text-xs md:text-sm max-w-sm leading-relaxed mt-4 md:mt-6">
-              Lorem Ipsum is simply dummy text of the printing and typesetting industry. 
-              Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.
+              {heroData.description || "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s."}
             </p>
 
             {/* Social Media Buttons */}
@@ -59,13 +105,13 @@ export default function HeroSection() {
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 1 }}
-            src="/headphone.png" // PASTIKAN NAMA FILE KAMU ADALAH headphone.png
+            src={heroData.hero_image || "/headphone.png"}
             alt="Premium Headphone"
             className="w-[90%] md:w-[75%] lg:w-[65%] object-contain z-20 drop-shadow-[0_25px_25px_rgba(0,0,0,0.8)]"
           />
           
           <img 
-            src="/headphone.png" // PASTIKAN NAMA FILE KAMU ADALAH headphone.png
+            src={heroData.hero_image || "/headphone.png"}
             className="absolute right-[-5%] md:right-[0%] opacity-15 w-[80%] md:w-[60%] object-contain blur-sm grayscale -z-10"
             alt=""
             aria-hidden="true"
@@ -75,16 +121,18 @@ export default function HeroSection() {
 
       {/* --- Footer Cards --- */}
       <div className="absolute bottom-0 left-0 w-full grid grid-cols-2 md:grid-cols-4 gap-1 px-8 md:px-12 pb-6 md:pb-8">
-        {[1, 2, 3, 4].map((item) => (
+        {(featuresList.length > 0 ? featuresList : [1,2,3,4]).map((item, index) => (
           <div 
-            key={item}
+            key={index}
             className={`p-4 md:p-6 h-28 md:h-32 flex flex-col justify-end transition-transform duration-300 hover:-translate-y-1 ${
-              item % 2 === 0 ? 'bg-[#a36e3e]' : 'bg-[#1a1a1a]'
+              index % 2 === 0 ? 'bg-[#a36e3e]' : 'bg-[#1a1a1a]'
             }`}
           >
-            <h3 className="text-[10px] font-bold uppercase tracking-widest mb-1">Product 0{item}</h3>
+            <h3 className="text-[10px] font-bold uppercase tracking-widest mb-1">
+              {typeof item === 'object' ? item.title || `Product 0${index+1}` : `Product 0${index+1}`}
+            </h3>
             <p className="text-[9px] text-gray-300 leading-tight opacity-70 line-clamp-2">
-              Lorem ipsum dolor sit amet consectetur elit.
+              {typeof item === 'object' ? item.description || "Lorem ipsum dolor sit amet consectetur elit." : "Lorem ipsum dolor sit amet consectetur elit."}
             </p>
           </div>
         ))}
