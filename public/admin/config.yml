@@ -1,0 +1,35 @@
+backend:
+  name: git-gateway
+  branch: main  # Ganti dengan branch utama kamu (main/master)
+  repo: username/nama-repo  # Ganti dengan username GitHub dan nama repo kamu
+
+# Folder untuk menyimpan gambar yang diupload
+media_folder: "public/uploads"  # File akan disimpan di sini
+public_folder: "/uploads"  # URL publik untuk mengakses gambar
+
+# Koleksi konten - sesuaikan dengan struktur landing page kamu
+collections:
+  - name: "homepage"
+    label: "Homepage"
+    files:
+      - name: "hero"
+        label: "Hero Section"
+        file: "content/hero.md"
+        fields:
+          - { label: "Judul Utama", name: "title", widget: "string" }
+          - { label: "Subjudul", name: "subtitle", widget: "string" }
+          - { label: "Gambar Hero", name: "hero_image", widget: "image" }
+          - { label: "Tombol Teks", name: "button_text", widget: "string", required: false }
+          - { label: "Tombol Link", name: "button_link", widget: "string", required: false }
+      
+      - name: "features"
+        label: "Fitur/Layanan"
+        file: "content/features.md"
+        fields:
+          - label: "Daftar Fitur"
+            name: "features"
+            widget: "list"
+            fields:
+              - { label: "Ikon", name: "icon", widget: "string" }
+              - { label: "Judul Fitur", name: "title", widget: "string" }
+              - { label: "Deskripsi", name: "description", widget: "text" }
