@@ -1,6 +1,7 @@
 ---
 title: Premium Wireless Headphon
-subtitle: Nikmati suaranya
+subtitle: "   "
+description: coba sekarang mumpung ada
 hero_image: /uploads/headphone.png
 button_text: ""
 ---
